@@ -10,4 +10,13 @@
 //  "status": "completed"
 // }
 
-DELETE http://localhost:3000/tasks/5
+// DELETE http://localhost:3000/tasks/5
+
+
+POST http://localhost:3000/tasks
+content-type: application/json
+
+{
+    //"name": "Cozinhar",
+    "status":"in progress"
+}

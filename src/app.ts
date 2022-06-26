@@ -9,12 +9,18 @@ app.use(json());
 app.get("/tasks", async (request: Request, response: Response) => {
   // Query the database
 
-  await database.execute("select * from tasks", (err, rows) => {
+  await database.execute("select * from tasks", (err, rows: any) => {
     if (err) {
       return response
         .status(500)
         .json({ message: `Houve erro ao buscar a lista de tarefas ${err}` });
     }
+    if (rows.length <= 0) {
+      return response
+        .status(404)
+        .json({ message: "Nenhuma tarefa encontrada" });
+    }
+
     return response.json(rows);
   });
 });
@@ -32,6 +38,13 @@ app.get("/tasks/:id", async (request: Request, response: Response) => {
           .status(500)
           .json({ message: `Houve erro ao buscar a tarefa ${err}` });
       }
+
+      if (!rows) {
+        return response
+          .status(500)
+          .json({ message: `Nenhuma tarefa foi encontrada` });
+      }
+
       return response.json(rows);
     }
   );
@@ -44,7 +57,18 @@ app.post("/tasks/", async (request: Request, response: Response) => {
   // Insert the task into the database
   const sqlString =
     "INSERT INTO tasks (name, status, created_at, updated_at) VALUES (?,?,?,?)";
-  const values = [name, status, new Date(), new Date()];
+  let values = [name, status, new Date(), new Date()];
+  if (!name || name === undefined) {
+    return response
+      .status(500)
+      .json({ message: `Nenhuma tarefa deve estar com nome vazio` });
+  }
+  
+  if (!status || status === undefined) {
+    return response
+      .status(500)
+      .json({ message: `Nenhuma tarefa deve estar com status vazio` });
+  }
 
   database.query(sqlString, values, (err, data, fields) => {
     if (err) {
@@ -52,6 +76,7 @@ app.post("/tasks/", async (request: Request, response: Response) => {
         .status(500)
         .json({ message: `Houve erro ao inserir a tarefa ${err}` });
     }
+
     return response.json({
       status: 200,
       message: "A new task has been created",
@@ -73,6 +98,7 @@ app.put("/tasks/:id", async (request: Request, response: Response) => {
         .status(500)
         .json({ message: `Houve erro ao atualizar a tarefa ${err}` });
     }
+
     return response.json({
       status: 200,
       message: "A task has been updated",
@@ -89,14 +115,12 @@ app.delete("/tasks/:id", async (request: Request, response: Response) => {
   database.query(
     "SELECT * FROM tasks WHERE id = ?",
     values,
-    (err, rows, fields) => {
+    (err, rows: any, fields) => {
       if (rows.length <= 0) {
-        return response
-          .status(404)
-          .json({
-            status: 404,
-            message: `A tarefa especificada é inexistente`,
-          });
+        return response.status(404).json({
+          status: 404,
+          message: `A tarefa especificada é inexistente`,
+        });
       }
 
       database.query(sqlString, values, (err, data, fields) => {
