@@ -1,0 +1,13 @@
+// GET  http://localhost:3000/tasks
+
+// GET http://localhost:3000/tasks/1
+
+//PUT http://localhost:3000/tasks/6
+//content-type: application/json
+
+// {
+//  "name": "Buy Milk",
+//  "status": "completed"
+// }
+
+DELETE http://localhost:3000/tasks/5
