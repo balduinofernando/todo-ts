@@ -5,6 +5,9 @@ const port: number = 3000;
 
 app.use(json());
 // Routes
+app.get("/", (request: Request, response: Response) => {
+  return response.send("Ola Mundo");
+});
 
 app.get("/tasks", async (request: Request, response: Response) => {
   // Query the database
@@ -63,7 +66,7 @@ app.post("/tasks/", async (request: Request, response: Response) => {
       .status(500)
       .json({ message: `Nenhuma tarefa deve estar com nome vazio` });
   }
-  
+
   if (!status || status === undefined) {
     return response
       .status(500)
