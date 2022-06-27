@@ -1,7 +1,7 @@
 import express, { json, Request, Response } from "express";
 import { database } from "./config/database";
 const app: express.Application = express();
-const port: number = 3000;
+const port = process.env.PORT || 3000;
 
 app.use(json());
 // Routes
