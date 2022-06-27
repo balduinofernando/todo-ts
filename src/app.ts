@@ -1,3 +1,4 @@
+import "dotenv/config";
 import express, { json, Request, Response } from "express";
 import { database } from "./config/database";
 const app: express.Application = express();
