@@ -1,4 +1,4 @@
-// GET  http://localhost:3000/tasks
+GET  http://localhost:3000/tasks
 
 // GET http://localhost:3000/tasks/1
 
@@ -13,10 +13,10 @@
 // DELETE http://localhost:3000/tasks/5
 
 
-POST http://localhost:3000/tasks
-content-type: application/json
+//POST http://localhost:3000/tasks
+#content-type: application/json
 
-{
-    "name": "Cozinhar couve",
-    "status":"in progress"
-}
+#{
+ #   "name": "Cozinhar couve",
+ #   "status":"in progress"
+#}
